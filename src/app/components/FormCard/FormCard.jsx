@@ -11,32 +11,6 @@ const FormCard = () => {
 
   const { name, setName, myUserId, callUser, isCallAccepted } = useContext(VideoCallContext);  
 
-  const fetchPeerId = async (peerId) => {
-    try {
-      const response = await fetch("/api/client", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ peerId }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-
-      const data = await response.json();
-      console.log("Peer ID saved:", data);
-    } catch (error) {
-      console.error("Error saving peer ID:", error);
-    }
-  };
-
-  useEffect(() => {
-    if (myUserId) {
-      fetchPeerId(myUserId);
-    }
-  }, [myUserId]); // Run only when myUserId is defined
 
   const handleCopyClick = () => {
     navigator.clipboard.writeText(myUserId);
@@ -45,6 +19,16 @@ const FormCard = () => {
       setIsCopied(false);
     }, 1500);
   };
+
+  const handleGetId =  async () => {
+    const id = await fetch("/api/latestclient");
+    if (!id.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const data = await id.json();
+    setIdToCall(data.peerId);
+    console.log("Peer ID saved:", data);    
+  }
 
   return (
     <>
@@ -69,7 +53,7 @@ const FormCard = () => {
                 <button
                   type="button"
                   className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition duration-200 mb-3"
-                  onClick={handleCopyClick}
+                  onClick={handleGetId}
                 >
                   {isCopied ? (
                     <>
