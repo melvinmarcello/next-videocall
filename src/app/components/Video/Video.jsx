@@ -77,8 +77,7 @@ const Video = () => {
       }
       
       // Check if video is already playing
-      if (!localVideoPlayingRef.current) {
-        console.log("Attempting to play local video...");
+      if (!localVideoPlayingRef.current) {        
         
         // Try to play the video
         const playPromise = myVideoRef.current.play();

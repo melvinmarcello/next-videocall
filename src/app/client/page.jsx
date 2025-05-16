@@ -3,22 +3,22 @@
 import Video from "../components/Video/Video";
 import IncomingCall from "../components/IncomingCall/IncomingCall";
 import { useContext, useEffect } from "react";
-import { VideoCallContext } from "../context/VideoCallContext";
+import { VideoCallContext } from "@/app/context/VideoCallContext";
+import axios from "axios";
 
 export default function page() {
-  const { name, setName, myUserId, callUser, isCallAccepted } = useContext(VideoCallContext);
+  const { myUserId } = useContext(VideoCallContext);    
   console.log("myUserId", myUserId);
+  
     const fetchPeerId = async (peerId) => {
       try {
-        const response = await fetch("/api/client", {
-          method: "POST",
+        const response = await axios.post("/api/client", { peerId }, {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ peerId }),
         });
-  
-        if (!response.ok) {
+
+        if (response.status !== 200) {
           throw new Error("Network response was not ok");
         }
   

@@ -31,14 +31,12 @@ const VideoCallProvider = ({ children }) => {
   // Effect to initialize user media stream
   useEffect(() => {
     const getUserMediaStream = async () => {
-      try {
-        console.log("Attempting to get user media...");
+      try {        
         const stream = await navigator.mediaDevices.getUserMedia({
           video: true,
           audio: true,
         });
-        
-        console.log("User media obtained successfully", stream);
+                
         setUserStream(stream);
         setHasVideoPermission(true);
         
@@ -74,8 +72,7 @@ const VideoCallProvider = ({ children }) => {
 
   // Separate effect to handle video element when stream changes
   useEffect(() => {
-    if (userStream && myVideoRef.current) {
-      console.log("Setting user stream to video element", myVideoRef.current);
+    if (userStream && myVideoRef.current) {      
       myVideoRef.current.srcObject = userStream;
       
       // Force play the video (addresses autoplay issues in some browsers)
@@ -95,7 +92,13 @@ const VideoCallProvider = ({ children }) => {
 
   useEffect(() => {
     const handleSocketEvents = () => {
+      socket.on("connect", () => {
+        console.log("Connected with ID:", socket.id); // You should see this first
+      });
+
+
       socket.on("socketId", (id) => {
+        console.log("Socket ID received:", id);   
         setMyUserId(id);
       });
 

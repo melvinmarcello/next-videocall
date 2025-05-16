@@ -1,7 +1,11 @@
 import { io } from "socket.io-client";
 
-const URL = "http://localhost:5000";
-// const URL = "https://video-call-server-gm7i.onrender.com";
+const URL = "https://okvidcall.webuat.online";
 
-export const socket = io(URL);
-export const navbarBrand = "YourVideoShare";
+// Your server uses: path: "/socketio"
+export const socket = io(URL, {
+  path: "/socket.io", // ✅ match server `path` exactly
+  transports: ["websocket"], // ✅ optional but recommended to force WebSocket
+  secure: true, // ✅ since using HTTPS
+  withCredentials: true, // ✅ to allow CORS with credentials
+});
