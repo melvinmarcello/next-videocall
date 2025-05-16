@@ -102,8 +102,7 @@ const VideoCallProvider = ({ children }) => {
         setMyUserId(id);
       });
 
-      socket.on("mediaStatusChanged", ({ mediaType, isActive }) => {
-        console.log("Media status changed:", mediaType, isActive);
+      socket.on("mediaStatusChanged", ({ mediaType, isActive }) => {      
         if (isActive !== null) {
           if (mediaType === "video") {
             setIsPartnerVideoActive(isActive);

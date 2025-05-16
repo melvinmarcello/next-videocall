@@ -1,10 +1,12 @@
 "use client";
 import React, { useState, useContext, useEffect } from "react";
 import { VideoCallContext } from "@/app/context/VideoCallContext";
-import { Copy, Phone, Check } from "lucide-react";
+import { Copy, Phone, Check, RefreshCcw } from "lucide-react";
 import "./FormCard.css";
-
+import { usePathname } from "next/navigation";
+import axios from "axios";
 const FormCard = () => {
+  const pathname = usePathname();
   const [idToCall, setIdToCall] = useState("");
   const [isCopied, setIsCopied] = useState(false);
 
@@ -20,14 +22,15 @@ const FormCard = () => {
     }, 1500);
   };
 
-  const handleGetId =  async () => {
-    const id = await fetch("/api/latestclient");
-    if (!id.ok) {
-      throw new Error("Network response was not ok");
+  const handleGetId = async () => {
+    try {
+      const response = await axios.get(`/api/client?uniq_id=${pathname.split("/")[2]}`);
+      const data = response.data;
+      setIdToCall(data.peerId);
+      console.log("Peer ID saved:", data);
+    } catch (error) {
+      console.error("Error getting peer ID:", error);
     }
-    const data = await id.json();
-    setIdToCall(data.peerId);
-    console.log("Peer ID saved:", data);    
   }
 
   return (
@@ -61,7 +64,7 @@ const FormCard = () => {
                     </>
                   ) : (
                     <>
-                      <Copy size={22} /> Copy Your ID
+                      <RefreshCcw size={22} /> Refresh ID
                     </>
                   )}
                 </button>              

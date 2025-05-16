@@ -2,7 +2,7 @@
 
 import React, { useContext, useState, useEffect, useRef } from "react";
 import { VideoCallContext } from "@/app/context/VideoCallContext";
-import { PhoneCall, PhoneOff, X } from "lucide-react";
+import { Phone, PhoneCall, PhoneOff, X } from "lucide-react";
 
 
 const IncomingCall = () => {
@@ -48,45 +48,56 @@ const IncomingCall = () => {
   if (!showModal) return null;
 
   return (
-    <>
-      {/* <audio src="../../assets/ringtone.ogg" loop ref={audioRef} /> */}
-      
-      {/* Modal backdrop */}
-      <div className="fixed inset-0 bg-black bg-opacity-50 z-40 flex items-center justify-center">
-        {/* Modal container */}
-        <div className="bg-white rounded-lg shadow-lg w-full max-w-md mx-4 flex flex-col z-50">
-          {/* Modal header */}
-          <div className="flex justify-between items-center p-4 border-b">
-            <h3 className="text-lg font-semibold">
-              {call.name ? call.name : "Someone"} is calling:
-            </h3>
-            <button 
-              onClick={handleClose}
-              className="text-gray-500 hover:text-gray-700 focus:outline-none"
-            >
-              <X size={24} />
-            </button>
-          </div>
-          
-          {/* Modal footer */}
-          <div className="p-4 flex items-center justify-between">
-            <button 
-              onClick={handleClose} 
-              className="bg-red-500 hover:bg-red-600 text-white rounded-full p-3 focus:outline-none transition duration-200"
-            >
-              <PhoneOff size={25} />
-            </button>
-            
-            <div 
-              className="cursor-pointer transition-transform hover:scale-105" 
-              onClick={handleCallAnswer}
-            >
-              <PhoneCall size={25} className="text-green-500 animate-pulse" />
+    <div className="fixed inset-0 bg-black/50 flex items-start justify-center pt-8 z-50">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl overflow-hidden w-full max-w-sm mx-4 transform transition-all animate-in fade-in duration-300">
+        {/* Header with avatar */}
+        <div className="bg-blue-600 px-4 py-4 flex items-center justify-between">
+          <div className="flex items-center">
+            <div className="flex-shrink-0 bg-white rounded-full h-12 w-12 flex items-center justify-center text-blue-600">
+              <PhoneCall size={24} />
+            </div>
+            <div className="ml-3">
+              <h3 className="text-lg font-semibold text-white">
+                Customer Service is calling
+              </h3>
+              <p className="text-blue-100 text-sm">
+                Incoming call
+              </p>
             </div>
           </div>
+          <button 
+            onClick={() => setIsVisible(false)}
+            className="text-white hover:text-blue-200 transition-colors"
+          >
+            <X size={20} />
+          </button>
+        </div>
+        
+        {/* Call timer */}
+        <div className="px-4 py-3 bg-blue-50 dark:bg-gray-700">
+          <p className="text-center text-gray-600 dark:text-gray-300 flex items-center justify-center">
+            <span className="inline-block w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></span>
+            Calling...
+          </p>
+        </div>
+        
+        {/* Call actions */}
+        <div className="px-4 py-3 flex justify-center space-x-6">
+          <button 
+            onClick={handleClose}
+            className="bg-red-500 hover:bg-red-600 text-white rounded-full w-14 h-14 flex items-center justify-center transition-colors"
+          >
+            <PhoneOff size={24} />
+          </button>
+          <button
+            onClick={handleCallAnswer}
+            className="bg-green-500 hover:bg-green-600 text-white rounded-full w-14 h-14 flex items-center justify-center transition-colors animate-pulse"
+          >
+            <Phone size={24} />
+          </button>
         </div>
       </div>
-    </>
+    </div>    
   );
 };
 

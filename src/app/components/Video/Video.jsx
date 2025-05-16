@@ -6,7 +6,6 @@ import { Avatar } from "antd";
 import { socket } from "../../config/config";
 import Loading from "../Loading/Loading";
 import ChatModal from "../Chat/Chat";
-import "./Video.css";
 
 const Video = () => {
   const {
@@ -149,12 +148,15 @@ const Video = () => {
 
   return (
     <>
-      <div className="video-container" onClick={forcePlayVideos}>
-        <div className="flex flex-col md:flex-row w-full">
+      <div className="video-container h-screen w-screen bg-gray-800 p-4" onClick={forcePlayVideos}>
+        <div className="flex w-full justify-evenly items-center gap-4 mb-4 text-white font-medium text-lg">
+          <p className="w-full text-start">You</p>
+          <p className="w-full ">Customer</p>
+        </div>
+        <div className="flex flex-col md:flex-row w-full justify-center items-center gap-4">
           {userStream ? (
-            <div className={`w-full ${isCallAccepted ? 'md:w-1/2' : ''}`}>
-              <div className="bg-gray-800 rounded-lg shadow-lg p-4 m-2">
-                <h5 className="text-white text-lg font-medium mb-2">{name || "Me"}</h5>
+            <div className={`cs-camera w-1/2`}>
+              <div className="">                
                 <div className="relative flex justify-center items-center">
                   {hasVideoPermission ? (
                     <video
@@ -166,7 +168,7 @@ const Video = () => {
                         forcePlayVideos();
                       }}
                       autoPlay
-                      className={`rounded-md ${isCallAccepted ? "w-full" : "w-full md:w-3/4 lg:w-1/2 mx-auto"}`}
+                      className={`rounded-md w-full object-cover`}
                       style={{ opacity: isMyVideoActive ? 1 : 0 }}
                     />
                   ) : (
@@ -174,45 +176,25 @@ const Video = () => {
                       <p className="text-white text-sm">Camera permission denied</p>
                     </div>
                   )}
-                  <Avatar
-                    className={`absolute ${
-                      isMyVideoActive && hasVideoPermission ? "opacity-0" : "opacity-100"
-                    } transition-opacity duration-300`}
-                    size={100}
-                    icon={
-                      !name && (
-                        <User
+                  {!isMyVideoActive && (
+                    <div className="absolute left-1/2 transform -translate-x-1/2 mx-auto bg-gray-300 w-24 h-24 rounded-full flex items-center justify-center border-2 border-gray-500">
+                      <CameraOff
                           size={45}
                           style={{ marginBottom: "8px" }}
                         />
-                      )
-                    }
-                  >
-                    {name?.[0]?.toUpperCase()}
-                  </Avatar>
+                    </div>
+                    )}
                   {!isMyMicActive && (
                     <Volume2 className="absolute top-2 right-2 text-red-500" size={42} />
-                  )}
-                  {!isLocalVideoPlaying && hasVideoPermission && (
-                    <button 
-                      onClick={forcePlayVideos}
-                      className="absolute bg-blue-600 hover:bg-blue-700 text-white rounded-full p-3"
-                    >
-                      <VideoIcon size={24} />
-                    </button>
                   )}
                 </div>
               </div>
             </div>
           ) : (
             <Loading />
-          )}
-          {isCallAccepted && !isCallEnded && (
-            <div className="w-full md:w-1/2 mt-3 md:mt-0">
-              <div className="bg-gray-800 rounded-lg shadow-lg p-4 m-2">
-                <h5 className="text-white text-lg font-medium mb-2">
-                  {call.name || opponentName || "Partner"}
-                </h5>
+          )}          
+            {true && (<div className="cust-cam w-full md:w-1/2">
+              <div className=" rounded-lg">
                 <div className="relative flex justify-center items-center">
                   <video
                     playsInline
@@ -222,37 +204,28 @@ const Video = () => {
                       forcePlayVideos();
                     }}
                     autoPlay
-                    className="w-full rounded-md"
+                    className="min-h-full min-w-full rounded-md"
                     style={{ opacity: isPartnerVideoActive ? 1 : 0 }}
                   />
-                  <Avatar
-                    className={`absolute ${
-                      isPartnerVideoActive ? "opacity-0" : "opacity-100"
-                    } transition-opacity duration-300`}
-                    size={100}
-                    icon={
-                      !opponentName &&
-                      !call.name && (
-                        <User
+                  {!isPartnerVideoActive && (
+                    <div className="absolute left-1/2 transform -translate-x-1/2 mx-auto bg-gray-300 w-24 h-24 rounded-full flex items-center justify-center border-2 border-gray-500">
+                      <CameraOff
                           size={45}
                           style={{ marginBottom: "8px" }}
                         />
-                      )
-                    }
-                  >
-                    {(opponentName || call.name)?.slice(0, 1).toUpperCase()}
-                  </Avatar>
+                    </div>
+                    )}
                   {!isPartnerMicActive && (
                     <Volume2 className="absolute top-2 right-2 text-red-500" size={42} />
                   )}
                 </div>
               </div>
-            </div>
-          )}
+            </div>          
+      )}
         </div>
       </div>
       {userStream && (
-        <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 flex items-center justify-center space-x-3 bg-gray-900 bg-opacity-75 px-6 py-3 rounded-full">
+        <div className="absolute bottom-24 left-1/2 transform -translate-x-1/2 flex items-center justify-center space-x-3  bg-opacity-75 px-6 py-3 rounded-full">
           <button 
             onClick={toggleMicrophone} 
             className="w-12 h-12 flex items-center justify-center bg-gray-700 hover:bg-gray-600 rounded-full text-white focus:outline-none transition duration-200"
