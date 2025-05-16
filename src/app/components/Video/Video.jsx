@@ -91,8 +91,7 @@ const Video = () => {
             })
             .catch(error => {
               console.error("Error playing local video:", error);
-              // Try again with a user interaction
-              console.log("Will try to play on next user interaction");
+              // Try again with a user interaction              
             });
         }
       }
